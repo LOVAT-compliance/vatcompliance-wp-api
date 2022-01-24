@@ -3,7 +3,7 @@
 ## Description
 WordPress WooCommerce REST API Lovat Api
 
-## Установка плагина
+## Plugin Installation
 
 Download the extension as a ZIP file from this repository under the wp-content/plugins directory
 

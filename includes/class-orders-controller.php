@@ -121,7 +121,7 @@ class Orders_Controller extends WP_REST_Controller
 			}
 
 			return new WP_Error('HTTP_NOT_FOUND',
-				__("Не удалось найти данные по вашему запросу", 'rest-tutorial'),
+				__("Could not find data for your request", 'rest-tutorial'),
 				array(
 					'status' => 200,
 				)

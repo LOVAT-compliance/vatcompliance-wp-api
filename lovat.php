@@ -39,7 +39,7 @@ function isset_woocommerce_plugin()
 {
 	if (!is_plugin_active('woocommerce/woocommerce.php')) {
 		print '<div class="notice notice-error">
-             <p><b>Lovat api</b> предупреждение: "Для работы плагина, пожалуйста, установите или активируйте плагин WooCommerce".</p>
+             <p><b>Lovat api</b> warning: "For the application to work, please install or activate the application WooCommerce".</p>
          </div>';
 	}
 }

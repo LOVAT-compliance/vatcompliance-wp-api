@@ -42,7 +42,7 @@ class Lovat_Admin
 		$arrayKeys = self::generated_keys();
 		$arrayCountries = require LOVAT_API_PLUGIN_DIR . '/includes/countries.php';
 		$issetCountry = $helper->get_lovat_option_value();
-		if (!is_null(self::isset_token_by_user($user->ID))) self::add_warning('Вы уже сгенерировали токен. При нажатие на кнопку "Сгенерировать ключь" вы ОБНОВИТЕ его.');
+		if (!is_null(self::isset_token_by_user($user->ID))) self::add_warning('You have already generated a token. When you click on the "Generate key" button, you will UPDATE it.');
 		include(LOVAT_API_PLUGIN_DIR . '/admin/views/api_settings.php');
 	}
 
@@ -63,7 +63,7 @@ class Lovat_Admin
 						array('user_id' => $user->ID)
 					);
 
-					self::add_success('Ключь был успешно обновлен. Новый ключь : ' . $bearerToken);
+					self::add_success('The key has been successfully updated. New key : ' . $bearerToken);
 				} else {
 					$wpdb->insert(
 						$wpdb->prefix . 'lovat_api_keys',
@@ -71,9 +71,9 @@ class Lovat_Admin
 						array('%s', '%s',)
 					);
 
-					self::add_success('Ключь был успешно сгенерирован. Ключь : ' . $bearerToken);
+					self::add_success('The key was successfully generated. Key : ' . $bearerToken);
 				}
-			} else self::add_error('Только пользователь с ролью администратор может генерировать ключь.');
+			} else self::add_error('Only a user with the administrator role can generate a key.');
 		}
 
 		if (!empty($_POST['save-departure-country'])) {
@@ -96,7 +96,7 @@ class Lovat_Admin
 				);
 			}
 
-			self::add_success('Страна отправки успешно сохранена');
+			self::add_success('Shipping country saved successfully');
 		}
 	}
 

@@ -67,7 +67,6 @@ class Orders_Controller extends WP_REST_Controller
 				'date_created' => $dateValidationResult['from'] . '...' . $dateValidationResult['to'],
 				'limit' => self::LIMIT,
 				'offset' => $offset,
-				'version' => '4.4.1',
 			);
 
 			$orders = wc_get_orders($arrayOrdersArguments);
@@ -94,6 +93,8 @@ class Orders_Controller extends WP_REST_Controller
 						'country' => $data->get_shipping_country(),
 						'city' => $data->get_shipping_city(),
 						'get_shipping_address_1' => $data->get_shipping_address_1(),
+						'arrival_zip' => $data->get_billing_postcode(),
+						'departure_zip' => $data->get_shipping_postcode(),
 						'rate_code' => null,
 						'rate_id' => null,
 						'label' => null,

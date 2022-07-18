@@ -9,7 +9,7 @@
  * @package Lovat
  */
 // Define constants.
-define('LOVAT_API_PLUGIN_VERSION', '1.0.0');
+define('LOVAT_API_PLUGIN_VERSION', '1.0.1');
 define('LOVAT_API_PLUGIN_DIR', untrailingslashit(plugin_dir_path(__FILE__)));
 define('LOVAT_API_URL', plugin_dir_url(__FILE__));
 

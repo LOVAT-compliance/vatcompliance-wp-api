@@ -73,9 +73,8 @@ class Orders_Controller extends WP_REST_Controller
 
 			if (!empty($orders)) {
 				$helper = new Lovat_Helper();
-				$departureCountry = $helper->get_lovat_option_value();
+				$lovatData = json_decode($helper->get_lovat_option_value());
 				$orderClass = get_class(new Automattic\WooCommerce\Admin\Overrides\Order());
-
 				$lovatDataArray = array();
 
 				foreach ($orders as $data) {
@@ -93,12 +92,12 @@ class Orders_Controller extends WP_REST_Controller
 						'country' => $data->get_shipping_country(),
 						'city' => $data->get_shipping_city(),
 						'get_shipping_address_1' => $data->get_shipping_address_1(),
-						'arrival_zip' => $data->get_billing_postcode(),
-						'departure_zip' => $data->get_shipping_postcode(),
+						'arrival_zip' => $data->get_shipping_postcode(),
 						'rate_code' => null,
 						'rate_id' => null,
 						'label' => null,
-						'departure_address' => $departureCountry
+						'departure_address' => $lovatData->country,
+						'departure_zip' => $lovatData->departureZip
 					);
 
 					if (!empty($data->get_taxes())) {

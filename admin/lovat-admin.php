@@ -41,7 +41,7 @@ class Lovat_Admin
 
 		$arrayKeys = self::generated_keys();
 		$arrayCountries = require LOVAT_API_PLUGIN_DIR . '/includes/countries.php';
-		$issetCountry = $helper->get_lovat_option_value();
+		$lovatData = json_decode($helper->get_lovat_option_value());
 		if (!is_null(self::isset_token_by_user($user->ID))) self::add_warning('You have already generated a token. When you click on the "Generate key" button, you will UPDATE it.');
 		include(LOVAT_API_PLUGIN_DIR . '/admin/views/api_settings.php');
 	}
@@ -78,6 +78,12 @@ class Lovat_Admin
 
 		if (!empty($_POST['save-departure-country'])) {
 			$country = $_POST['departure-select-country'];
+			$departureZip = $_POST['departure_zip'];
+
+			$lovatOptions = json_encode(array(
+				'country' => $country,
+				'departureZip' => $departureZip
+			));
 
 			$helper = new Lovat_Helper();
 			$issetRow = $helper->get_lovat_option_value();
@@ -85,18 +91,18 @@ class Lovat_Admin
 			if (!empty($issetRow)) {
 				$wpdb->update(
 					$wpdb->prefix . 'options',
-					array('option_value' => $country),
+					array('option_value' => $lovatOptions),
 					array('option_name' => 'lovat_departure_country')
 				);
 			} else {
 				$wpdb->insert(
 					$wpdb->prefix . 'options',
-					array('option_name' => 'lovat_departure_country', 'option_value' => $country),
+					array('option_name' => 'lovat_departure_country', 'option_value' => $lovatOptions),
 					array('%s', '%s',)
 				);
 			}
 
-			self::add_success('Shipping country saved successfully');
+			self::add_success('Shipping country and zip saved successfully');
 		}
 	}
 

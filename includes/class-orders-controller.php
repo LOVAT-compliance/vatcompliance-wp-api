@@ -80,10 +80,19 @@ class Orders_Controller extends WP_REST_Controller
 				foreach ($orders as $data) {
 					if (get_class($data) != $orderClass) continue;
 
+					switch ($data->status) {
+						case 'completed':
+							$dateCompletedGmt = $data->get_date_completed();
+							break;
+						case 'refunded':
+							$refunds = $data->get_refunds();
+							$dateCompletedGmt = $refunds[0]->get_date_created()->format('Y-m-d G:i:s');
+					}
+
 					$lovatDataArray[$data->get_id()] = array(
 						'id' => $data->get_id(),
 						'transaction_id' => $data->get_transaction_id(),
-						'date_completed_gmt' => $data->get_date_completed(),
+						'date_completed_gmt' => $dateCompletedGmt,
 						'total' => $data->get_total(),
 						'currency' => $data->get_currency(),
 						'status' => $data->get_status(),

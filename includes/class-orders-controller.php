@@ -64,7 +64,7 @@ class Orders_Controller extends WP_REST_Controller
 
 			$arrayOrdersArguments = array(
 				'status' => ['completed', 'refunded'],
-				'date_created' => $dateValidationResult['from'] . '...' . $dateValidationResult['to'],
+				'date_modified' => $dateValidationResult['from'] . '...' . $dateValidationResult['to'],
 				'limit' => self::LIMIT,
 				'offset' => $offset,
 			);
@@ -86,28 +86,13 @@ class Orders_Controller extends WP_REST_Controller
 							break;
 						case 'refunded':
 							$refunds = $data->get_refunds();
-							$dateCompletedGmt = $refunds[0]->get_date_created();
+							$dateCompletedGmt = $refunds[0]->get_date_created()->format('Y-m-d G:i:s');
 					}
 
-					$lovatDataArray[$data->get_id()] = array(
-						'id' => $data->get_id(),
-						'transaction_id' => $data->get_transaction_id(),
-						'date_completed_gmt' => $dateCompletedGmt,
-						'total' => $data->get_total(),
-						'currency' => $data->get_currency(),
-						'status' => $data->get_status(),
-						'total_tax' => $data->get_total_tax(),
-						'customer_ip_address' => $data->get_customer_ip_address(),
-						'country' => $data->get_shipping_country(),
-						'city' => $data->get_shipping_city(),
-						'get_shipping_address_1' => $data->get_shipping_address_1(),
-						'arrival_zip' => $data->get_shipping_postcode(),
-						'rate_code' => null,
-						'rate_id' => null,
-						'label' => null,
-						'departure_address' => $lovatData->country,
-						'departure_zip' => $lovatData->departureZip
-					);
+					$lovatDataArray[$data->get_id()] = $data->data;
+					$lovatDataArray[$data->get_id()]['departure_address'] = $lovatData->country;
+					$lovatDataArray[$data->get_id()]['departure_zip'] = $lovatData->departureZip;
+					$lovatDataArray[$data->get_id()]['date_completed_gmt'] = $dateCompletedGmt;
 
 					if (!empty($data->get_taxes())) {
 						foreach ($data->get_taxes() as $key => $taxes) {

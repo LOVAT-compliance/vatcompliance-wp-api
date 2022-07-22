@@ -86,7 +86,7 @@ class Orders_Controller extends WP_REST_Controller
 							break;
 						case 'refunded':
 							$refunds = $data->get_refunds();
-							$dateCompletedGmt = $refunds[0]->get_date_created()->format('Y-m-d G:i:s');
+							$dateCompletedGmt = $refunds[0]->get_date_created();
 					}
 
 					$lovatDataArray[$data->get_id()] = $data->data;

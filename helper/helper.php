@@ -8,7 +8,7 @@ class Lovat_Helper
 	public function is_tax_calculation_enabled()
 	{
 		$option = json_decode(get_option('lovat_departure_country'));
-		if ($option->calculate_tax == 'on') {
+		if (!empty($option->calculate_tax) && $option->calculate_tax == 'on') {
 			return true;
 		}
 

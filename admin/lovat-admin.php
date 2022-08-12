@@ -94,13 +94,19 @@ class Lovat_Admin
 		}
 
 		if (!empty($_POST['save-departure-country'])) {
-			$country = $_POST['departure-select-country'];
-			$departureZip = $_POST['departure_zip'];
-			$accessToken = $_POST['access_token'];
+			$country = '';
 			$calculateTax = 'off';
+
+			if (!empty($_POST['departure-select-country'])) {
+				$country = $_POST['departure-select-country'];
+			}
+
 			if (!empty($_POST['calculate_tax'])) {
 				$calculateTax = 'on';
 			}
+
+			$departureZip = $_POST['departure_zip'];
+			$accessToken = $_POST['access_token'];
 
 			$lovatOptions = json_encode(array(
 				'country' => $country,
@@ -109,24 +115,9 @@ class Lovat_Admin
 				'calculate_tax' => $calculateTax
 			));
 
-			$issetRow = (new Lovat_Helper)->get_lovat_option_value();
-
-			if (!empty($issetRow)) {
-				$wpdb->update(
-					$wpdb->prefix . 'options',
-					array('option_value' => $lovatOptions),
-					array('option_name' => 'lovat_departure_country')
-				);
-			} else {
-				$wpdb->insert(
-					$wpdb->prefix . 'options',
-					array('option_name' => 'lovat_departure_country', 'option_value' => $lovatOptions),
-					array('%s', '%s',)
-				);
-			}
-
+			update_option('lovat_departure_country', $lovatOptions);
 			wp_cache_delete(LOVAT_CACHE_OPTION_VALUE); // clear cache
-			self::add_success('Settings was correctly updated.');
+			self::add_success('Shipping country and zip saved successfully');
 		}
 	}
 

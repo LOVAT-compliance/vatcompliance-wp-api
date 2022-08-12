@@ -25,7 +25,7 @@
         <form name="save-lovat-departure-country" method="post">
             <label for="calculate_tax_rate">Calculate tax</label>
             <input type="checkbox" id="calculate_tax_rate" name="calculate_tax"
-				<?php echo($lovatData->calculate_tax == 'on' ? 'checked' : ''); ?>>
+				<?php echo(!empty($lovatData->calculate_tax) && $lovatData->calculate_tax == 'on' ? 'checked' : ''); ?>>
             <br>
             <label for="calculate_tax_rate_input">Access token</label>
             <input style="max-width: 350px; width: 100%;" id="calculate_tax_rate_input" type="text" class="access_token"

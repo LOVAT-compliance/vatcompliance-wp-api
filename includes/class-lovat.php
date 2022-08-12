@@ -3,9 +3,11 @@
 class Lovat
 {
 	protected static $_instance = null;
-
 	public $authentication;
 
+	/**
+	 * @return Lovat|null
+	 */
 	public static function instance()
 	{
 		if (is_null(self::$_instance)) {
@@ -15,6 +17,9 @@ class Lovat
 		return self::$_instance;
 	}
 
+	/**
+	 * Lovat constructor.
+	 */
 	public function __construct()
 	{
 		$this->includes();
@@ -24,6 +29,9 @@ class Lovat
 		}
 	}
 
+	/**
+	 * include classes
+	 */
 	public function includes()
 	{
 		//includes

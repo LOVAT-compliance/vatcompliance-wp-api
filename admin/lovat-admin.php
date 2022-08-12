@@ -57,7 +57,7 @@ class Lovat_Admin
 	}
 
 	/**
-	 *
+	 * Save settings
 	 */
 	public static function save_settings()
 	{
@@ -126,7 +126,7 @@ class Lovat_Admin
 			}
 
 			wp_cache_delete(LOVAT_CACHE_OPTION_VALUE); // clear cache
-			self::add_success('Shipping country and zip saved successfully');
+			self::add_success('Settings was correctly updated.');
 		}
 	}
 

@@ -11,6 +11,11 @@ class LovatTaxCalculation
 		add_action('woocommerce_after_calculate_totals', array($this, 'calculate_car_taxes'), 20);
 	}
 
+	/**
+	 * Calculate tax
+	 *
+	 * @throws Exception
+	 */
 	public function calculate_car_taxes()
 	{
 		if (defined('DOING_AJAX') && DOING_AJAX) {

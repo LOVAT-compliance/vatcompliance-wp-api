@@ -23,6 +23,15 @@
 
     <div class="departure-address lovat-white-block">
         <form name="save-lovat-departure-country" method="post">
+            <label for="calculate_tax_rate">Calculate tax</label>
+            <input type="checkbox" id="calculate_tax_rate" name="calculate_tax"
+				<?php echo($lovatData->calculate_tax == 'on' ? 'checked' : ''); ?>>
+            <br>
+            <label for="calculate_tax_rate_input">Access token</label>
+            <input style="max-width: 350px; width: 100%;" id="calculate_tax_rate_input" type="text" class="access_token"
+                   name="access_token" style="margin-top:10px;"
+                   value="<?php echo(!empty($lovatData->access_token) ? $lovatData->access_token : ''); ?>"/>
+            <br>
             <label for="departure-select-country">Please select a shipping country</label>
             <select id="departure-select-country" class="departure-select-country" name="departure-select-country">
                 <option value="" selected disabled hidden>Choose the country of dispatch</option>

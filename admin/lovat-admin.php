@@ -3,11 +3,12 @@
 class Lovat_Admin
 {
 	private static $errors;
-
 	private static $success;
-
 	private static $warning;
 
+	/**
+	 * init
+	 */
 	public static function init()
 	{
 		// Add menu
@@ -19,12 +20,18 @@ class Lovat_Admin
 		}
 	}
 
+	/**
+	 * add lovat menu
+	 */
 	public static function add_menu()
 	{
 		add_options_page('Lovat', 'Api Settings', 'manage_options', 'icon_title', array(__class__, 'lovat_settings_page'));
 		add_menu_page('Lovat', 'Api Settings', 'administrator', __FILE__, array(__class__, 'lovat_settings_page'), LOVAT_API_URL . 'admin/images/logo_lovat.png');
 	}
 
+	/**
+	 * enqueue scripts
+	 */
 	public static function enqueue_scripts()
 	{
 		wp_enqueue_script('admin-jquery-js', LOVAT_API_URL . 'admin/js/jquery-2.0.3.min.js', array('jquery'), LOVAT_API_PLUGIN_VERSION, false);
@@ -34,18 +41,24 @@ class Lovat_Admin
 		wp_enqueue_script('admin-datatables-call-js', LOVAT_API_URL . 'admin/js/datatables-call.js', array('jquery'), LOVAT_API_PLUGIN_VERSION, true);
 	}
 
+	/**
+	 * include settings page
+	 */
 	public static function lovat_settings_page()
 	{
 		$user = wp_get_current_user();
 		$helper = new Lovat_Helper();
 
-		$arrayKeys = self::generated_keys();
+		$arrayKeys = $helper->generated_keys();
 		$arrayCountries = require LOVAT_API_PLUGIN_DIR . '/includes/countries.php';
-		$lovatData = json_decode($helper->get_lovat_option_value());
-		if (!is_null(self::isset_token_by_user($user->ID))) self::add_warning('You have already generated a token. When you click on the "Generate key" button, you will UPDATE it.');
+		$lovatData = $helper->get_lovat_option_value();
+		if (!is_null($helper->isset_token_by_user($user->ID))) self::add_warning('You have already generated a token. When you click on the "Generate key" button, you will UPDATE it.');
 		include(LOVAT_API_PLUGIN_DIR . '/admin/views/api_settings.php');
 	}
 
+	/**
+	 *
+	 */
 	public static function save_settings()
 	{
 		global $wpdb;
@@ -54,7 +67,7 @@ class Lovat_Admin
 			if (wc_current_user_has_role('administrator')) {
 				$bearerToken = self::create_key();
 				$user = wp_get_current_user();
-				$issetUserToken = self::isset_token_by_user($user->ID);
+				$issetUserToken = (new Lovat_Helper)->isset_token_by_user($user->ID);
 
 				if (!is_null($issetUserToken)) {
 					$wpdb->update(
@@ -74,19 +87,29 @@ class Lovat_Admin
 					self::add_success('The key was successfully generated. Key : ' . $bearerToken);
 				}
 			} else self::add_error('Only a user with the administrator role can generate a key.');
+
+			//clear cache
+			wp_cache_delete(LOVAT_GENERATED_KEYS);
+			wp_cache_delete(ISSET_TOKEN_BY_USER . $user->ID);
 		}
 
 		if (!empty($_POST['save-departure-country'])) {
 			$country = $_POST['departure-select-country'];
 			$departureZip = $_POST['departure_zip'];
+			$accessToken = $_POST['access_token'];
+			$calculateTax = 'off';
+			if (!empty($_POST['calculate_tax'])) {
+				$calculateTax = 'on';
+			}
 
 			$lovatOptions = json_encode(array(
 				'country' => $country,
-				'departureZip' => $departureZip
+				'departureZip' => $departureZip,
+				'access_token' => $accessToken,
+				'calculate_tax' => $calculateTax
 			));
 
-			$helper = new Lovat_Helper();
-			$issetRow = $helper->get_lovat_option_value();
+			$issetRow = (new Lovat_Helper)->get_lovat_option_value();
 
 			if (!empty($issetRow)) {
 				$wpdb->update(
@@ -102,25 +125,38 @@ class Lovat_Admin
 				);
 			}
 
+			wp_cache_delete(LOVAT_CACHE_OPTION_VALUE); // clear cache
 			self::add_success('Shipping country and zip saved successfully');
 		}
 	}
 
+	/**
+	 * @param $text
+	 */
 	public static function add_error($text)
 	{
 		self::$errors = $text;
 	}
 
+	/**
+	 * @param $text
+	 */
 	public static function add_success($text)
 	{
 		self::$success = $text;
 	}
 
+	/**
+	 * @param $text
+	 */
 	public static function add_warning($text)
 	{
 		self::$warning = $text;
 	}
 
+	/**
+	 * @return string
+	 */
 	public static function show_error_message()
 	{
 		if (!is_null(self::$errors))
@@ -129,6 +165,9 @@ class Lovat_Admin
 			</div>';
 	}
 
+	/**
+	 * @return string
+	 */
 	public static function show_success_message()
 	{
 		if (!is_null(self::$success))
@@ -137,6 +176,9 @@ class Lovat_Admin
 			</div>';
 	}
 
+	/**
+	 * @return string
+	 */
 	public static function show_warning_message()
 	{
 		if (!is_null(self::$warning))
@@ -145,25 +187,17 @@ class Lovat_Admin
   			</div>';
 	}
 
+	/**
+	 * @return string
+	 */
 	public static function create_key()
 	{
 		return 'lt_' . wc_rand_hash();
 	}
 
-	public static function isset_token_by_user(int $userId)
-	{
-		global $wpdb;
-		$issetUserToken = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}lovat_api_keys WHERE user_id = {$userId}");
-		return $issetUserToken;
-	}
-
-	public static function generated_keys()
-	{
-		global $wpdb;
-		$result = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}lovat_api_keys");
-		return $result;
-	}
-
+	/**
+	 * @return bool
+	 */
 	public static function get_current_admin_url()
 	{
 		$uri = isset($_SERVER['REQUEST_URI']) ? esc_url_raw(wp_unslash($_SERVER['REQUEST_URI'])) : '';

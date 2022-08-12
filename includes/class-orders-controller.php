@@ -5,9 +5,11 @@ class Orders_Controller extends WP_REST_Controller
 	const LIMIT = 1000;
 
 	protected $namespace = 'v1';
-
 	protected $rest_base = 'orders';
 
+	/**
+	 * register routes
+	 */
 	public function register_routes()
 	{
 		register_rest_route($this->namespace, $this->rest_base, array(
@@ -19,6 +21,9 @@ class Orders_Controller extends WP_REST_Controller
 		);
 	}
 
+	/**
+	 * @return array
+	 */
 	public function get_import_collection_params()
 	{
 		$params = array();
@@ -45,6 +50,11 @@ class Orders_Controller extends WP_REST_Controller
 		return $params;
 	}
 
+	/**
+	 * @param $data
+	 * @return array|WP_Error
+	 * @throws Exception
+	 */
 	public function get_woocommerce_orders($data)
 	{
 		$dateFrom = $data['from'];
@@ -73,7 +83,7 @@ class Orders_Controller extends WP_REST_Controller
 
 			if (!empty($orders)) {
 				$helper = new Lovat_Helper();
-				$lovatData = json_decode($helper->get_lovat_option_value());
+				$lovatData = $helper->get_lovat_option_value();
 				$orderClass = get_class(new Automattic\WooCommerce\Admin\Overrides\Order());
 				$lovatDataArray = array();
 
@@ -123,12 +133,21 @@ class Orders_Controller extends WP_REST_Controller
 		}
 	}
 
+	/**
+	 * @return mixed|void
+	 */
 	public function get_orders_permission_check()
 	{
 		$result = apply_filters('lovat_api_check_authentication', null);
 		return $result;
 	}
 
+	/**
+	 * @param $from
+	 * @param $to
+	 * @return array|bool
+	 * @throws Exception
+	 */
 	public function validationApiGetDataFromTo($from, $to)
 	{
 		if ($this->is_Date($from) != false and $this->is_Date($to) != false) {
@@ -142,11 +161,19 @@ class Orders_Controller extends WP_REST_Controller
 		return false;
 	}
 
+	/**
+	 * @param $str
+	 * @return false|int
+	 */
 	public function is_Date($str)
 	{
 		return strtotime($str);
 	}
 
+	/**
+	 * @param $p
+	 * @return array
+	 */
 	public function remainingAmount($p)
 	{
 		$count = wc_orders_count('completed') + wc_orders_count('refunded');

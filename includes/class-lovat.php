@@ -18,13 +18,17 @@ class Lovat
 	public function __construct()
 	{
 		$this->includes();
+		//calculate tax
+		if ((new Lovat_Helper())->is_tax_calculation_enabled()) {
+			(new LovatTaxCalculation())->init_hooks();
+		}
 	}
 
 	public function includes()
 	{
 		//includes
 		include_once(LOVAT_API_PLUGIN_DIR . '/includes/class-server.php');
-		include_once( LOVAT_API_PLUGIN_DIR . '/includes/class-lovat-api-authentication.php' );
+		include_once(LOVAT_API_PLUGIN_DIR . '/includes/class-lovat-api-authentication.php');
 		$this->authentication = new Lovat_Api_Authentication();
 
 		//admin

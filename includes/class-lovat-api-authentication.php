@@ -10,17 +10,26 @@ if (!defined('ABSPATH')) {
 class Lovat_Api_Authentication
 {
 
+	/**
+	 * Lovat_Api_Authentication constructor.
+	 */
 	public function __construct()
 	{
 		add_filter('lovat_api_check_authentication', array($this, 'authenticate'), 0);
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function authenticate()
 	{
 		$result = $this->perform_oauth_authentication();
 		return $result;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function perform_oauth_authentication()
 	{
 		$header = $this->get_authorization_header();
@@ -41,6 +50,9 @@ class Lovat_Api_Authentication
 		return false;
 	}
 
+	/**
+	 * @return |null
+	 */
 	public function get_authorization_header()
 	{
 		if (function_exists('getallheaders')) {
@@ -56,6 +68,10 @@ class Lovat_Api_Authentication
 		return null;
 	}
 
+	/**
+	 * @param $header
+	 * @return mixed|null
+	 */
 	public function parse_header($header)
 	{
 		if ('Bearer' !== substr($header, 0, 6)) {
@@ -69,6 +85,10 @@ class Lovat_Api_Authentication
 		return null;
 	}
 
+	/**
+	 * @param $token
+	 * @return array|object|void|null
+	 */
 	public function get_data_by_bearer_token($token)
 	{
 		global $wpdb;

@@ -2,6 +2,9 @@
 
 class Lovat_Activator
 {
+	/**
+	 * activate
+	 */
 	public static function activate()
 	{
 		global $wpdb;

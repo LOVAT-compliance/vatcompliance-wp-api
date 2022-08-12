@@ -10,6 +10,9 @@
  */
 // Define constants.
 define('LOVAT_API_PLUGIN_VERSION', '1.0.1');
+define('LOVAT_CACHE_OPTION_VALUE', 'LOVAT_CACHE_VALUE');
+define('ISSET_TOKEN_BY_USER', 'ISSET_TOKEN_BY_USER_USER_ID');
+define('LOVAT_GENERATED_KEYS', 'LOVAT_GENERATED_KEYS');
 define('LOVAT_API_PLUGIN_DIR', untrailingslashit(plugin_dir_path(__FILE__)));
 define('LOVAT_API_URL', plugin_dir_url(__FILE__));
 

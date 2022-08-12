@@ -4,6 +4,9 @@ class Server
 {
 	protected $controllers = [];
 
+	/**
+	 * @return Server|null
+	 */
 	public static function get_instance()
 	{
 		static $instance = null;
@@ -23,7 +26,10 @@ class Server
 		add_action('rest_api_init', array($this, 'register_rest_routes'), 10);
 	}
 
-	// Includes
+
+	/**
+	 * Includes
+	 */
 	public function register_rest_routes()
 	{
 		foreach ($this->get_rest_namespaces() as $namespace => $controllers) {
@@ -34,6 +40,9 @@ class Server
 		}
 	}
 
+	/**
+	 * @return mixed|void
+	 */
 	public function get_rest_namespaces()
 	{
 		return apply_filters(
@@ -44,6 +53,9 @@ class Server
 		);
 	}
 
+	/**
+	 * @return array
+	 */
 	public function get_v1_controllers()
 	{
 		return [

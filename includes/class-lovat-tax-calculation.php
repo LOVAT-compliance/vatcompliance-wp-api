@@ -52,7 +52,7 @@ class LovatTaxCalculation
 				$request = new Lovat_Api_Requests('POST', $requestArray, $optionValue->access_token);
 				$taxPrice = $request->do_request();
 
-				if (!empty($taxPrice)) {
+				if (!empty($taxPrice) && $taxPrice > 0) {
 					$newTotalPrice = $taxPrice + $totalPrice;
 					WC()->cart->set_subtotal_tax($taxPrice);
 					WC()->cart->set_cart_contents_tax($taxPrice);

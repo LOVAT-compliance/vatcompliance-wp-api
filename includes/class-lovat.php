@@ -25,6 +25,7 @@ class Lovat
 		$this->includes();
 		//calculate tax
 		if ((new Lovat_Helper())->is_tax_calculation_enabled()) {
+			$this->update_tax_options();
 			(new LovatTaxCalculation())->init_hooks();
 		}
 	}
@@ -41,5 +42,32 @@ class Lovat
 
 		//admin
 		include_once(LOVAT_API_PLUGIN_DIR . '/admin/lovat-admin.php');
+	}
+
+	public function update_tax_options()
+	{
+		// If TaxJar is enabled and user disables taxes we re-enable them
+		update_option('woocommerce_calc_taxes', 'yes');
+
+		// Users can set either billing or shipping address for tax rates but not shop
+		update_option('woocommerce_tax_based_on', 'shipping');
+
+		// Rate calculations assume tax not included
+		update_option('woocommerce_prices_include_tax', 'no');
+
+		// Use no special handling on shipping taxes, our API handles that
+		update_option('woocommerce_shipping_tax_class', '');
+
+		// API handles rounding precision
+		update_option('woocommerce_tax_round_at_subtotal', 'no');
+
+		// Rates are calculated in the cart assuming tax not included
+		update_option('woocommerce_tax_display_shop', 'excl');
+
+		// TaxJar returns one total amount, not line item amounts
+		update_option('woocommerce_tax_display_cart', 'excl');
+
+		// TaxJar returns one total amount, not line item amounts
+		update_option('woocommerce_tax_total_display', 'single');
 	}
 }

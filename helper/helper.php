@@ -81,4 +81,15 @@ class Lovat_Helper
 
 		return null;
 	}
+
+	/**
+	 * @param $date
+	 * @return string
+	 * @throws Exception
+	 */
+	public function dateFormat($date)
+	{
+		$datetime = new DateTime($date);
+		return $datetime->format(DateTime::ATOM);
+	}
 }

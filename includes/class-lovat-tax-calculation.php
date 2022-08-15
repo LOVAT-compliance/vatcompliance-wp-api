@@ -8,7 +8,7 @@ class LovatTaxCalculation
 	public function init_hooks()
 	{
 		// Calculate Taxes at checkout
-		add_action('woocommerce_after_calculate_totals', array($this, 'calculate_car_taxes'), 20);
+		add_action('woocommerce_after_calculate_totals', array($this, 'calculate_tax'), 20);
 	}
 
 	/**
@@ -16,7 +16,7 @@ class LovatTaxCalculation
 	 *
 	 * @throws Exception
 	 */
-	public function calculate_car_taxes()
+	public function calculate_tax()
 	{
 		if (defined('DOING_AJAX') && DOING_AJAX) {
 			//if get data from ajax
@@ -30,7 +30,7 @@ class LovatTaxCalculation
 			}
 
 			$requestArray = array(
-				'transaction_datetime' => $this->dateFormat(date('Y-m-d H:i:s')),
+				'transaction_datetime' => $helper->dateFormat(date('Y-m-d H:i:s')),
 				'currency' => get_option('woocommerce_currency'),
 				'transaction_sum' => $totalPrice,
 				'departure_country' => $departureCountry,
@@ -55,16 +55,5 @@ class LovatTaxCalculation
 				WC()->cart->set_cart_contents_total($newTotalPrice);
 			}
 		}
-	}
-
-	/**
-	 * @param $date
-	 * @return string
-	 * @throws Exception
-	 */
-	public function dateFormat($date)
-	{
-		$datetime = new DateTime($date);
-		return $datetime->format(DateTime::ATOM);
 	}
 }

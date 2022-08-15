@@ -7,7 +7,7 @@ class LovatTaxCalculation
 	 */
 	public function init_hooks()
 	{
-		// Calculate Taxes at checkout
+		// Calculate Tax
 		add_action('woocommerce_after_calculate_totals', array($this, 'calculate_tax'), 20);
 	}
 
@@ -37,22 +37,30 @@ class LovatTaxCalculation
 				'departure_zip' => $optionValue->departureZip,
 			);
 
-			//data from ajax
-			$requestArray["arrival_country"] = $helper->convertCountry($_POST['s_country']); //convert from iso2 to iso3
-			$requestArray["arrival_zip"] = $_POST['s_postcode'];
+			if (!empty($_POST['billing_postcode']) && !empty($_POST['billing_country'])) {
+				//order calculated
+				$requestArray["arrival_country"] = $helper->convertCountry($_POST['billing_country']); //convert from iso2 to iso3
+				$requestArray["arrival_zip"] = $_POST['billing_postcode'];
+			} else {
+				//data from ajax cart calculated
+				$requestArray["arrival_country"] = $helper->convertCountry($_POST['s_country']); //convert from iso2 to iso3
+				$requestArray["arrival_zip"] = $_POST['s_postcode'];
+			}
 
-			//do request to get vat
-			$request = new Lovat_Api_Requests('POST', $requestArray, $optionValue->access_token);
-			$taxPrice = $request->do_request();
+			if (!empty($requestArray['arrival_country']) && !empty($requestArray['arrival_zip'])) {
+				//do request to get vat
+				$request = new Lovat_Api_Requests('POST', $requestArray, $optionValue->access_token);
+				$taxPrice = $request->do_request();
 
-			if (!empty($taxPrice)) {
-				$newTotalPrice = $taxPrice + $totalPrice;
-				WC()->cart->set_subtotal_tax($taxPrice);
-				WC()->cart->set_cart_contents_tax($taxPrice);
-				WC()->cart->set_cart_contents_taxes(array('total' => $taxPrice));
-				WC()->cart->set_total_tax($taxPrice);
-				WC()->cart->set_total($newTotalPrice);
-				WC()->cart->set_cart_contents_total($newTotalPrice);
+				if (!empty($taxPrice)) {
+					$newTotalPrice = $taxPrice + $totalPrice;
+					WC()->cart->set_subtotal_tax($taxPrice);
+					WC()->cart->set_cart_contents_tax($taxPrice);
+					WC()->cart->set_cart_contents_taxes(array('total' => $taxPrice));
+					WC()->cart->set_total_tax($taxPrice);
+					WC()->cart->set_total($newTotalPrice);
+					WC()->cart->set_cart_contents_total($newTotalPrice);
+				}
 			}
 		}
 	}

@@ -2,14 +2,14 @@
 /**
  * Plugin Name: Lovat Api
  * Description: Lovat Api, return orders data in intermediate time "from" "to"
- * Version: 1.0.0
+ * Version: 1.0.2
  * Author: Denys Maksiura
  * Requires at least: 5.2
  * Requires PHP: 7.0
  * @package Lovat
  */
 // Define constants.
-define('LOVAT_API_PLUGIN_VERSION', '1.0.1');
+define('LOVAT_API_PLUGIN_VERSION', '1.0.2');
 define('LOVAT_CACHE_OPTION_VALUE', 'LOVAT_CACHE_VALUE');
 define('ISSET_TOKEN_BY_USER', 'ISSET_TOKEN_BY_USER_USER_ID');
 define('LOVAT_GENERATED_KEYS', 'LOVAT_GENERATED_KEYS');

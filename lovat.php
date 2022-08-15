@@ -6,6 +6,7 @@
  * Author: Denys Maksiura
  * Requires at least: 5.2
  * Requires PHP: 7.0
+ * WC requires at least: 4.4.4
  * @package Lovat
  */
 // Define constants.

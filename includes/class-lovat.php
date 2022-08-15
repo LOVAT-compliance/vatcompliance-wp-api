@@ -46,7 +46,7 @@ class Lovat
 
 	public function update_tax_options()
 	{
-		// If TaxJar is enabled and user disables taxes we re-enable them
+		// If is enabled and user disables taxes we re-enable them
 		update_option('woocommerce_calc_taxes', 'yes');
 
 		// Users can set either billing or shipping address for tax rates but not shop
@@ -64,10 +64,10 @@ class Lovat
 		// Rates are calculated in the cart assuming tax not included
 		update_option('woocommerce_tax_display_shop', 'excl');
 
-		// TaxJar returns one total amount, not line item amounts
+		// Returns one total amount, not line item amounts
 		update_option('woocommerce_tax_display_cart', 'excl');
 
-		// TaxJar returns one total amount, not line item amounts
+		// Returns one total amount, not line item amounts
 		update_option('woocommerce_tax_total_display', 'single');
 	}
 }

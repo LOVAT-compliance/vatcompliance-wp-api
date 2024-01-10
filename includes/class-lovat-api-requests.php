@@ -42,8 +42,8 @@ class Lovat_Api_Requests
 		$result = json_decode(curl_exec($ch));
 		curl_close($ch);
 
-		if (!empty($result->vat) || $result->vat == 0) {
-			return $result->vat;
+		if (!empty($result->tax_amount) || $result->tax_amount == 0) {
+			return $result->tax_amount;
 		}
 
 		return null;

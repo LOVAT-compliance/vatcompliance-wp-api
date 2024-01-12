@@ -60,8 +60,23 @@ class LovatTaxCalculation
 					WC()->cart->set_total_tax($taxPrice);
 					WC()->cart->set_total($newTotalPrice);
 					WC()->cart->set_cart_contents_total($newTotalPrice);
+
+					// Set custom label for Sales Tax if user is from the USA
+					if ($requestArray['arrival_country'] === 'USA') {
+						add_filter('woocommerce_countries_tax_or_vat', array($this, 'change_sales_tax_label'), 10, 3);
+					}
 				}
 			}
 		}
+	}
+
+	/**
+	 * Change sales tax label for users from the USA
+	 *
+	 * @return string
+	 */
+	public function change_sales_tax_label()
+	{
+		return __('Sales Tax', 'woocommerce');
 	}
 }

@@ -2,7 +2,7 @@
 
 class Lovat_Api_Requests
 {
-	protected $url = 'https://merchant.vatcompliance.co/api/1/tax_rate/';
+	protected $url = 'https://api.lappa.org/api/1/tax_rate/';
 	protected $method;
 	protected $data;
 	protected $key;

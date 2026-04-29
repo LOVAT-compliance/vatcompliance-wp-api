@@ -1,7 +1,7 @@
-# Lovat_Api
+# Lappa_Api
 
 ## Description
-WordPress WooCommerce REST API Lovat Api
+WordPress WooCommerce REST API Lappa Api
 
 ## Plugin Installation
 
